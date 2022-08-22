@@ -1,0 +1,27 @@
+stages:
+    - deploy
+
+image: alpine:latest
+
+deploy-sgremote:
+  stage: deploy
+  before_script:
+  - 'which ssh-agent || ( apk update && apk add --no-cache openssh-client )'
+  - eval "$(ssh-agent -s)"
+  - echo "$SSH_PRIVATE_KEY_MYMACBOOK" | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo "$SGREMOTE_HOST" >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+  script:
+    - >
+      ssh -p 2211 -o StrictHostKeyChecking=no root@$SGREMOTE_HOST "
+      cd /var/www/Project-TPEC-2 ;
+      git reset --hard origin/main ;
+      git pull ;
+      composer update ;
+      php spark migrate ;
+      php spark db:seed UserSeeder ;
+      php spark db:seed CategorySeeder ;
+      service nginx reload;
+      "

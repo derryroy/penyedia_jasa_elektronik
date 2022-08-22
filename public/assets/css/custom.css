@@ -1,0 +1,29 @@
+.card-category {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+
+.service-image {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.order-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.divider {
+    border-top: 1px solid rgba(0,0,0,.1);
+    margin: .75rem 0;
+}
+
+
+.card-img-service {
+    height: 240px;
+    object-fit: cover;
+}
